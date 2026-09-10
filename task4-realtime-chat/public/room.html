@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Room — AlphaMeet</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <div class="room-container">
+    <!-- Main Stage: Video Grid + Whiteboard + Controls -->
+    <div class="main-stage">
+      
+      <!-- Room Top Meta Bar -->
+      <div style="position: absolute; top: 12px; left: 16px; z-index: 30; display: flex; align-items: center; gap: 0.8rem; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); padding: 0.4rem 0.9rem; border-radius: 9999px; border: 1px solid var(--border);">
+        <div style="font-weight: 800; font-size: 0.85rem; color: white;">
+          Room: <span id="display-room-code" style="color: var(--primary); font-family: monospace;"></span>
+        </div>
+        <button onclick="copyRoomInvite()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem;" title="Copy invite link">
+          <i class="far fa-copy"></i>
+        </button>
+      </div>
+
+      <!-- Video Grid -->
+      <div id="video-grid" class="video-grid">
+        <!-- Self Video Card -->
+        <div class="video-card" id="local-video-card">
+          <video id="local-video" class="video-element" autoplay playsinline muted></video>
+          <div class="video-overlay-name">
+            <i class="fas fa-user"></i>
+            <span id="local-user-name">You</span>
+          </div>
+        </div>
+        <!-- Remote Peer Videos are dynamically appended here -->
+      </div>
+
+      <!-- Real-Time Collaborative Whiteboard Overlay -->
+      <div id="whiteboard-overlay" class="whiteboard-overlay">
+        <!-- Whiteboard Toolbar -->
+        <div class="whiteboard-toolbar">
+          <div style="font-weight: 800; font-size: 0.9rem; color: white; display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fas fa-palette" style="color: var(--primary);"></i> Collaborative Whiteboard
+          </div>
+
+          <!-- Colors -->
+          <div style="display: flex; gap: 0.4rem; align-items: center;">
+            <button onclick="setBrushColor('#000000')" style="width: 22px; height: 22px; border-radius: 50%; background: #000000; border: 2px solid white; cursor: pointer;"></button>
+            <button onclick="setBrushColor('#ef4444')" style="width: 22px; height: 22px; border-radius: 50%; background: #ef4444; border: 2px solid white; cursor: pointer;"></button>
+            <button onclick="setBrushColor('#3b82f6')" style="width: 22px; height: 22px; border-radius: 50%; background: #3b82f6; border: 2px solid white; cursor: pointer;"></button>
+            <button onclick="setBrushColor('#10b981')" style="width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 2px solid white; cursor: pointer;"></button>
+            <button onclick="setBrushColor('#f59e0b')" style="width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; border: 2px solid white; cursor: pointer;"></button>
+          </div>
+
+          <!-- Brush Size -->
+          <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-muted);">
+            <span>Size:</span>
+            <select onchange="setBrushSize(this.value)" style="background: #1e293b; color: white; border: 1px solid var(--border); padding: 0.2rem 0.5rem; border-radius: 4px;">
+              <option value="2">2px</option>
+              <option value="4" selected>4px</option>
+              <option value="8">8px</option>
+              <option value="16">16px</option>
+            </select>
+          </div>
+
+          <!-- Tools -->
+          <button id="btn-eraser" onclick="toggleEraser()" class="control-btn" style="width: 32px; height: 32px; font-size: 0.85rem;" title="Eraser">
+            <i class="fas fa-eraser"></i>
+          </button>
+          <button onclick="clearWhiteboard(true)" class="control-btn" style="width: 32px; height: 32px; font-size: 0.85rem;" title="Clear Board">
+            <i class="fas fa-trash"></i>
+          </button>
+          <button onclick="downloadWhiteboard()" class="control-btn" style="width: 32px; height: 32px; font-size: 0.85rem;" title="Download Snapshot">
+            <i class="fas fa-download"></i>
+          </button>
+
+          <button onclick="toggleWhiteboardView()" style="margin-left: auto; background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">
+            &times;
+          </button>
+        </div>
+
+        <!-- Canvas -->
+        <div class="canvas-container">
+          <canvas id="whiteboard-canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Bottom Control Bar -->
+      <footer class="meeting-controls">
+        <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+          <i class="fas fa-lock" style="color: var(--success);"></i>
+          <span>End-to-End Media Mesh</span>
+        </div>
+
+        <div class="control-btn-group">
+          <!-- Mic Toggle -->
+          <button id="btn-toggle-mic" class="control-btn" onclick="toggleAudio()" title="Toggle Microphone">
+            <i class="fas fa-microphone"></i>
+          </button>
+
+          <!-- Cam Toggle -->
+          <button id="btn-toggle-cam" class="control-btn" onclick="toggleVideo()" title="Toggle Camera">
+            <i class="fas fa-video"></i>
+          </button>
+
+          <!-- Screen Share -->
+          <button id="btn-screen-share" class="control-btn" onclick="toggleScreenShare()" title="Share Screen">
+            <i class="fas fa-desktop"></i>
+          </button>
+
+          <!-- Whiteboard Toggle -->
+          <button id="btn-toggle-whiteboard" class="control-btn" onclick="toggleWhiteboardView()" title="Collaborative Whiteboard">
+            <i class="fas fa-palette"></i>
+          </button>
+
+          <!-- Chat Toggle -->
+          <button id="btn-toggle-chat" class="control-btn active" onclick="toggleChatDrawer()" title="In-Meeting Chat">
+            <i class="fas fa-comment-alt"></i>
+          </button>
+
+          <!-- Leave Meeting -->
+          <button class="control-btn danger" onclick="leaveMeeting()" title="Leave Call">
+            <i class="fas fa-phone-slash"></i> Leave
+          </button>
+        </div>
+
+        <div style="font-size: 0.82rem; color: var(--text-muted);">
+          AlphaMeet v2.4
+        </div>
+      </footer>
+    </div>
+
+    <!-- Right Drawer: Chat & File Sharing -->
+    <aside id="room-sidebar" class="room-sidebar">
+      <div class="sidebar-header">
+        <div><i class="fas fa-comments" style="color: var(--primary); margin-right: 0.4rem;"></i> In-Call Messages</div>
+        <button onclick="toggleChatDrawer()" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- Messages Log -->
+      <div id="chat-messages" class="chat-messages">
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 0.8rem 0;">
+          <i class="fas fa-shield-alt" style="color: var(--success);"></i> Messages are encrypted & ephemeral in this session.
+        </div>
+      </div>
+
+      <!-- Hidden File Input -->
+      <input type="file" id="file-share-input" style="display: none;" onchange="handleFileSelect(event)">
+
+      <!-- Input Box -->
+      <form class="chat-input-box" onsubmit="sendChatMessage(event)">
+        <button type="button" onclick="triggerFileUpload()" class="control-btn" style="width: 38px; height: 38px; font-size: 0.9rem;" title="Send File to Room">
+          <i class="fas fa-paperclip"></i>
+        </button>
+        <input type="text" id="chat-input" class="form-input" placeholder="Type a message..." style="padding: 0.55rem 0.9rem; font-size: 0.88rem;" required>
+        <button type="submit" class="control-btn active" style="width: 38px; height: 38px; font-size: 0.9rem;">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </aside>
+  </div>
+
+  <script src="js/webrtc.js"></script>
+  <script src="js/whiteboard.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initConferenceRoom();
+    });
+  </script>
+</body>
+</html>

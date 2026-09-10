@@ -1,0 +1,373 @@
+/* CodeAlpha Real-Time Video & Collaboration App - Dark Glassmorphism Theme */
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark-bg: #0f172a;
+  --dark-panel: #1e293b;
+  --dark-card: rgba(30, 41, 59, 0.85);
+  --dark-control: #334155;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.1);
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Meeting Lobby Page */
+.lobby-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 3rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.lobby-card {
+  background: var(--dark-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Conference Room Layout */
+.room-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #090d16;
+}
+
+.main-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+/* Video Stream Grid */
+.video-grid {
+  flex: 1;
+  display: grid;
+  gap: 1rem;
+  padding: 1.2rem;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
+
+.video-card {
+  position: relative;
+  background: #1e293b;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.video-card.speaking {
+  border-color: var(--success);
+}
+
+.video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Mirror self video */
+}
+
+.video-element.peer-video {
+  transform: scaleX(1);
+}
+
+.video-overlay-name {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.video-avatar-fallback {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+/* Meeting Bottom Control Bar */
+.meeting-controls {
+  height: 76px;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 50;
+}
+
+.control-btn-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.control-btn {
+  background: var(--dark-control);
+  color: white;
+  border: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: #475569;
+  transform: scale(1.05);
+}
+
+.control-btn.active {
+  background: var(--primary);
+}
+
+.control-btn.danger {
+  background: var(--danger);
+  border-radius: 12px;
+  padding: 0 1.2rem;
+  width: auto;
+  font-size: 0.9rem;
+  font-weight: 700;
+  gap: 0.4rem;
+}
+
+.control-btn.danger:hover {
+  background: #dc2626;
+}
+
+.control-btn.muted {
+  background: #b91c1c;
+}
+
+/* Sidebar Drawers (Chat & Whiteboard) */
+.room-sidebar {
+  width: 360px;
+  background: var(--dark-panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.sidebar-header {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+/* Chat Messages */
+.chat-messages {
+  flex: 1;
+  padding: 1rem 1.2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.chat-bubble {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  max-width: 90%;
+}
+
+.chat-bubble.mine {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--primary);
+  align-self: flex-end;
+}
+
+.chat-sender {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-input-box {
+  padding: 1rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Whiteboard Canvas Modal / Overlay */
+.whiteboard-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 86px;
+  background: #1e293b;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: none;
+  flex-direction: column;
+  z-index: 40;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.whiteboard-overlay.active {
+  display: flex;
+}
+
+.whiteboard-toolbar {
+  padding: 0.6rem 1.2rem;
+  background: #0f172a;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.canvas-container {
+  flex: 1;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+canvas#whiteboard-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+@media (max-width: 768px) {
+  .lobby-container {
+    grid-template-columns: 1fr;
+  }
+  .room-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+  }
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
