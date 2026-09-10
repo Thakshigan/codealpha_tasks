@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart — AlphaStore</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="container nav-container">
+      <a href="/" class="brand-logo">
+        <i class="fas fa-cubes"></i>
+        <div>Alpha<span>Store</span></div>
+      </a>
+
+      <div class="nav-links">
+        <a href="/" class="nav-link"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+        <div id="nav-auth-container"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cart Content -->
+  <main class="container" style="padding-top: 2.5rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 2rem;">Your Shopping Cart</h1>
+
+    <!-- Empty State -->
+    <div id="empty-cart-state" style="display: none; text-align: center; padding: 5rem 1rem; background: white; border-radius: var(--radius); border: 1px solid var(--border);">
+      <i class="fas fa-shopping-cart" style="font-size: 3.5rem; color: var(--muted); margin-bottom: 1rem;"></i>
+      <h2>Your Cart is Currently Empty</h2>
+      <p style="color: var(--muted); margin: 0.5rem 0 1.5rem;">Looks like you haven't added anything to your cart yet.</p>
+      <a href="/" class="auth-btn" style="text-decoration: none; display: inline-block;">Browse Products</a>
+    </div>
+
+    <!-- Active Cart State -->
+    <div id="full-cart-state" class="cart-layout" style="display: none;">
+      <div class="cart-table-card">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem;">Review Items</h3>
+        <div id="cart-items-container">
+          <!-- Populated by cart.js -->
+        </div>
+      </div>
+
+      <div class="summary-card" id="cart-summary-container">
+        <!-- Populated by cart.js -->
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-bottom">
+      &copy; 2026 AlphaStore — CodeAlpha Full Stack Development Project.
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>
