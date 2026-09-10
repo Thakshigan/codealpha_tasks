@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlphaSocial — Mini Social Media Community</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Left Navigation Column -->
+    <aside class="sidebar-nav">
+      <a href="/" class="brand-title">
+        <i class="fas fa-bolt"></i>
+        <span>AlphaSocial</span>
+      </a>
+
+      <a href="/" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home Feed</span>
+      </a>
+
+      <a href="/explore.html" class="nav-item">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/profile.html" class="nav-item my-profile-link">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+
+      <button id="auth-action-btn" class="nav-item" style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Sign In</span>
+      </button>
+
+      <button onclick="openCreatePostModal()" class="btn-create-post-nav">
+        <i class="fas fa-pen-nib"></i> <span>Create Post</span>
+      </button>
+    </aside>
+
+    <!-- Center Feed Column -->
+    <main class="feed-column">
+      <!-- Tabs (All vs Following) -->
+      <div class="feed-header-tabs">
+        <button id="tab-for-you" class="tab-btn active" onclick="switchFeedTab('all')">Discover All</button>
+        <button id="tab-following" class="tab-btn" onclick="switchFeedTab('following')">Following</button>
+      </div>
+
+      <!-- Create Post Box -->
+      <div class="create-post-card">
+        <form onsubmit="handleCreatePost(event)">
+          <div class="create-post-inner">
+            <img src="https://i.pravatar.cc/150?img=1" alt="Avatar" class="avatar-sm current-user-avatar" onerror="this.src='https://i.pravatar.cc/150'">
+            <div style="flex: 1;">
+              <textarea id="post-content-input" class="post-textarea" placeholder="What's sparking in your mind? #WebDev #Tech" required></textarea>
+              
+              <div id="image-input-container" style="display: none; margin-top: 0.5rem;">
+                <input type="url" id="post-image-input" placeholder="Paste image URL (e.g. https://images.unsplash.com/...)" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; outline: none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="create-post-tools">
+            <button type="button" onclick="const c = document.getElementById('image-input-container'); c.style.display = c.style.display==='none'?'block':'none';" style="background: none; border: none; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 0.4rem; font-weight: 600; font-size: 0.9rem;">
+              <i class="far fa-image fa-lg"></i> Add Photo
+            </button>
+            <button type="submit" class="btn-post-submit">Post</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Live Stream -->
+      <div id="posts-stream">
+        <div style="text-align: center; padding: 3rem;"><i class="fas fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i></div>
+      </div>
+    </main>
+
+    <!-- Right Column (Who to follow & Trends) -->
+    <aside class="sidebar-widgets">
+      <div class="widget-card">
+        <h3 class="widget-title"><i class="fas fa-user-plus" style="color:var(--primary); margin-right:0.4rem;"></i> Who to Follow</h3>
+        <div id="suggested-users-list">
+          <!-- Populated by feed.js -->
+        </div>
+      </div>
+
+      <div class="widget-card">
+        <h3 class="widget-title"><i class="fas fa-hashtag" style="color:var(--accent); margin-right:0.4rem;"></i> Trending Topics</h3>
+        <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.9rem;">
+          <a href="#" onclick="document.getElementById('post-content-input').value='#FullStack '; return false;" style="color:var(--dark); text-decoration:none; font-weight:700;">#FullStack</a>
+          <span style="color:var(--muted); font-size:0.75rem; margin-top:-0.4rem;">1.2k posts</span>
+
+          <a href="#" onclick="document.getElementById('post-content-input').value='#CodeAlpha '; return false;" style="color:var(--dark); text-decoration:none; font-weight:700;">#CodeAlpha</a>
+          <span style="color:var(--muted); font-size:0.75rem; margin-top:-0.4rem;">980 posts</span>
+
+          <a href="#" onclick="document.getElementById('post-content-input').value='#JavaScript '; return false;" style="color:var(--dark); text-decoration:none; font-weight:700;">#JavaScript</a>
+          <span style="color:var(--muted); font-size:0.75rem; margin-top:-0.4rem;">3.4k posts</span>
+        </div>
+      </div>
+
+      <div style="font-size:0.78rem; color:var(--muted); text-align:center;">
+        &copy; 2026 AlphaSocial — CodeAlpha Internship Project
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/feed.js"></script>
+</body>
+</html>
